@@ -1,16 +1,50 @@
-# React + Vite
+# Support Ticket System — Admin Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React + Vite + Tailwind. A login-protected dashboard for staff to view and manage
+support tickets.
 
-Currently, two official plugins are available:
+**Live:** _add once deployed_
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## What this is
 
-## React Compiler
+- A login screen (JWT-based session, stored in the browser)
+- A ticket table with filters (status, priority), colored status badges, and an
+  action menu per ticket (Mark in progress / Resolve / Close)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+There's no public sign-up — admin accounts are created directly in the database via
+the backend's `seed-admin.js` script. Log in with those credentials.
 
-## Expanding the Oxlint configuration
+Talks to the backend API here: https://backend-support-ticket-system.onrender.com
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Local setup
+
+```bash
+cp .env.example .env   # set VITE_API_URL — see below
+npm install
+npm run dev              # usually http://localhost:5173 or :5174
+```
+
+### Environment variables
+VITE_API_URL=https://backend-support-ticket-system.onrender.com/api
+
+For local backend testing instead, use `http://localhost:5000/api`.
+
+> Vite bakes `VITE_API_URL` into the built files at **build time**, not runtime —
+> changing it requires a fresh `npm run build` (or a new deploy) to take effect.
+
+## Build
+
+```bash
+npm run build     # outputs to dist/
+```
+
+## Deploying (Netlify)
+
+1. New site on Netlify, connect this repo
+2. Build command: `npm run build` · Publish directory: `dist`
+3. Environment variable: `VITE_API_URL=https://backend-support-ticket-system.onrender.com/api`
+4. Deploy
+
+After deploying, make sure this site's URL is added to `CORS_ORIGIN` on the backend
+(Render), with no trailing slash — otherwise login and ticket-loading requests will
+fail with a CORS error in the browser console.
